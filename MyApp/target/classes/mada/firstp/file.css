@@ -1,0 +1,11 @@
+.label{
+    -fx-font: 50px  Gabriola;
+}
+.primaryStage{
+    -fx-border-radius: 50px;
+    -fx-background: 50px;
+}
+.separateur{
+    -fx-background-color: black;
+    -fx-margin-bottom: 20px;
+}

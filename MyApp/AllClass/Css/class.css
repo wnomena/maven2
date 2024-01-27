@@ -1,0 +1,9 @@
+.inputnumber{
+    -fx-control-inner-background: aqua;
+}
+.inputnumber:text{
+    -fx-text-fill: black;
+}
+.body{
+    -fx-border-radius: 10px;
+}
