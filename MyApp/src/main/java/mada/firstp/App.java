@@ -1,57 +1,75 @@
 package mada.firstp;
 
+
+import java.awt.Font;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.lang.Runnable;
+
 import javafx.application.Application;
-import javafx.beans.binding.IntegerBinding;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class App extends Application{
-     private Label label;
-     private TextField input;
-     private TextField input2;
-     private Button bouton;
-     public IntegerBinding integer;
-     public object value;
-
+    //tout les variables et les instance afin que ce soit accessible n'importe  ou
+    Thread ThreadP;
+    Timer time;
+    VBox box;
+    Label label;
+    String temp;
+    String temp2;
+    @Override
     public void start(Stage primaryStage) throws Exception{
-        VBox root = new VBox();
-        value = new object();
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(20));
-        root.setSpacing(20);
-        label = new Label("La somme du calcul actuelle est de  : " + value.getSomme());
-        input = new TextField("5");
-        input2 = new TextField("20");
-        bouton = new Button("Valider");
-        root.getChildren().addAll(label,input,input2,bouton);
-        bouton.setOnAction(new HandleBouton());
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
+        //Pour facilité l'acces au données j'ai créé un objet pour les donné des heures
+        object obj = new object();
+        temp2 = obj.getMinute();
+        temp = obj.getHeure();
+        //Interface initiale
+         label = new Label(temp +":"+ temp2);
+        label.setFont(new javafx.scene.text.Font(50));
+        box = new VBox();
+        box.getChildren().addAll(label);
+        box.setAlignment(Pos.CENTER);
+        Scene root = new Scene(box);
+        primaryStage.setScene(root);
         primaryStage.show();
+        //Le  thread principale est fait pour l'interface  et  du coup on a créé un second thread pour récuperer les donner à tout moment
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run(){
+                //Pour récupere lesdonnes tout les 1/2  de seconde set intervale  en JS
+                Timer timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run(){
+                        if (temp != Integer.toString(new Date().getHours())|| temp2 != Integer.toString(new Date().getMinutes())) {
+                            temp = Integer.toString(new Date().getHours());
+                            temp2 = Integer.toString(new Date().getMinutes());
+                            //revenir dans le thread principale pour afficher le resultat
+                            Platform.runLater(new Runnable(){
+                                @Override
+                                public void run(){
+                                    label.setText(temp + ":" + temp2);
+                                }
+                            });
+                            //Mbola mila amboarina le  ref chiffre en dessous de 0 de length 1 fotsiny nefa tokony atao 2;
+                            //tokony  hiverina @thread principale de avy eo apetaka le nouelle element en le label;
+                        }
+                    }
+                }, 0, 500);
+            }            
+        };
+        //initier le second thread pour le traitement en parallele
+      ThreadP = new Thread(myRunnable);
+      ThreadP.start();
     }
-
-
-    public static void main(String args0){
-        launch(args0);
+    public static void main(String args){      
+        launch(args);       
     }
-    public class HandleBouton implements EventHandler<ActionEvent>{
-
-        @Override
-        public void handle(ActionEvent e){
-           try {
-                value.setSomme(Integer.parseInt(input.getText()) + Integer.parseInt(input2.getText()));
-                label.setText("La somme du calcul actuelle est de : " + value.getSomme());
-           } catch (Exception i) {
-            System.out.println(i);
-           }
-        }
-    }
-} 
+}

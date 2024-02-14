@@ -1,30 +1,26 @@
 package mada.firstp;
 
-public class object {
+import java.util.Date;
 
-    
-    private int somme = 0;
-    private int input = 0;
-    private int input2 = 0;
+public class object{
+    String minute = Integer.toString(new Date().getMinutes());
+    String heure = Integer.toString(new Date().getHours());
 
+    public String getMinute(){
+        return this.minute;
+    }
 
-    public int getSomme(){
-        return somme;
+    public String getHeure(){
+        return this.heure;
     }
-    public int getinput(){
-        return input;
+    public void setMinute(String x){
+        this.minute = x;
     }
-    public int getinput2(){
-        return input2;
-    }
-    public void setSomme(int x){
-        this.somme = x;
-    }
-    public void setinput(int x){
-        this.input = x;
-    }
-    public void setinput2(int x){
-        this.input2 = x;
+
+    public void setHeure(String x){
+        this.heure = x;
     }
 }
 
+    
+    
